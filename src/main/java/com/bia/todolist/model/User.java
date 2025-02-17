@@ -1,6 +1,7 @@
 package com.bia.todolist.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.*;
@@ -73,6 +74,7 @@ public class User {
     }
 
 
+    @JsonIgnore
     public List<Task> getTask() {
         return task;
     }
