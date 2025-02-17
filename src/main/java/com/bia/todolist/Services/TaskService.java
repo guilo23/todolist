@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,6 +29,10 @@ public class TaskService {
         obj.setUser(user);
         var object = this.taskReporitory.save(obj);
         return object;
+    }
+    public List<Task> findAllByUserId(Long id){
+        List<Task> tasks = this.taskReporitory.findByUser_ids(id);
+        return tasks;
     }
     public Task update(Task obj){
       Task newObj = findById(obj.getId());

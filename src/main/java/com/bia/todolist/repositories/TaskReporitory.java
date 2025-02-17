@@ -12,8 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface TaskReporitory extends JpaRepository<Task, Long> {
-
-
+    List<Task> findByUser_ids(Long id);
 
 
     //@Query(value = "Select t FROM Task t WHERE t.USER.id = :id")
