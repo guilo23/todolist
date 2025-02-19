@@ -1,22 +1,26 @@
 package com.bia.todolist.Services;
 
-import com.bia.todolist.model.User;
-import com.bia.todolist.repositories.TaskReporitory;
-import com.bia.todolist.repositories.UserRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.bia.todolist.controller.DTOs.UserDto;
+import com.bia.todolist.model.User;
+import com.bia.todolist.repositories.TaskRepository;
+import com.bia.todolist.repositories.UserRepository;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
-    private TaskReporitory taskReporitory;
+    private  UserRepository userRepository;
+    private  TaskRepository taskRepository;
 
-    public UserService(TaskReporitory taskReporitory, UserRepository userRepository) {
-        this.taskReporitory = taskReporitory;
+    
+    public UserService(UserRepository userRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+    
     }
+
     public User findById(Long id){
         Optional<User> user = this.userRepository.findById(id);
 
@@ -25,18 +29,31 @@ public class UserService {
         ));
     }
 
-    @Transactional
-    public User create(User obj){
-        obj.setIds(null);
-        var object = this.userRepository.save(obj);
-        return object;
+    public Long create(UserDto userDto) {
+         User user = new User();
+        user.setUsername(userDto.username());
+        user.setPassword(userDto.password());
+        
+        // Salve o usuário
+        var userSaved = userRepository.save(user);
+    
+        // Verifique o que está sendo retornado
+        if (userSaved == null) {
+            throw new RuntimeException("Usuário não foi salvo. Retorno nulo.");
+        }
+    
+        // Log o ID gerado
+        System.out.println("Usuário salvo com ID: " + userSaved.getIds());
+        
+        return userSaved.getIds();  // Retorna o ID gerado
     }
-    @Transactional
+    
     public User update(User obj){
         User newObj = findById(obj.getIds());
         newObj.setPassword(obj.getPassword());
         return this.userRepository.save(newObj);
     }
+
     public void delete(Long id){
         findById(id);
         try {

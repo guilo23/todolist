@@ -1,50 +1,51 @@
 package com.bia.todolist.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.bia.todolist.Services.UserService;
+import com.bia.todolist.controller.DTOs.UserDto;
 import com.bia.todolist.model.User;
-import com.bia.todolist.repositories.UserRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/user")
-@Validated
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private  UserService userService;
 
-    @GetMapping("/{user_id}")
-    private ResponseEntity<User> findById(@PathVariable("user_id") Long id){
+    
+    public UserController(UserService userService) {
+        this.userService = userService;
+        System.out.println("UserService:" + userService);
+    }
+
+    @GetMapping("/{id}")
+    private ResponseEntity<User> findById(@PathVariable("id") Long id){
         var obj = this.userService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
-    @GetMapping
-    public ResponseEntity<List<User>>findAll(){
-        return null;
-    }
 
     @PostMapping
-    @Validated(User.CreateUser.class)
-    private ResponseEntity<Void> createUser(@Valid @RequestBody User obj){
-       this.userService.create(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                .path( "/{user_id}").buildAndExpand(obj.getIds()).toUri();
-       return ResponseEntity.created(uri).build();
+    private ResponseEntity<Object> create( @RequestBody UserDto userDto){
+        
+       this.userService.create(userDto);
+        return ResponseEntity.ok().build();
     }
-    @PutMapping("/{user_id}")
-    @Validated(User.UpdateUser.class)
-    private ResponseEntity<Void> updateUser(@PathVariable("user_id") Long id,@Valid @RequestBody User obj){
+
+    @PutMapping("/{id}")
+    private ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @Valid @RequestBody User obj){
         this.userService.update(obj);
         return ResponseEntity.noContent().build();
     }
+
     @DeleteMapping("/{user_id}")
     private ResponseEntity<Void> deleteUser(@PathVariable("user_id") Long id){
         this.userService.delete(id);
