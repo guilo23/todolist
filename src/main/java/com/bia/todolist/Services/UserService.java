@@ -1,20 +1,29 @@
 package com.bia.todolist.services;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.bia.todolist.enums.ProfileEnum;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.bia.todolist.Exceptions.DataBindingViolationException;
 import com.bia.todolist.Exceptions.ObjectNotFoundException;
-import org.springframework.stereotype.Service;
-
 import com.bia.todolist.controller.DTOs.UserDto;
 import com.bia.todolist.model.User;
 import com.bia.todolist.repositories.TaskRepository;
 import com.bia.todolist.repositories.UserRepository;
 
+
 @Service
 public class UserService {
     private  UserRepository userRepository;
     private  TaskRepository taskRepository;
+    
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     
     public UserService(UserRepository userRepository, TaskRepository taskRepository) {
@@ -33,8 +42,8 @@ public class UserService {
 
     public Long create(UserDto userDto) {
          User user = new User();
-        user.setUsername(userDto.username());
-        user.setPassword(userDto.password());
+        user.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet()));
+        user.setPassword(this.bCryptPasswordEncoder.encode(userDto.password()));
         
         // Salve o usuário
         var userSaved = userRepository.save(user);
@@ -52,7 +61,7 @@ public class UserService {
     
     public User update(User obj){
         User newObj = findById(obj.getIds());
-        newObj.setPassword(obj.getPassword());
+        newObj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
         return this.userRepository.save(newObj);
     }
 

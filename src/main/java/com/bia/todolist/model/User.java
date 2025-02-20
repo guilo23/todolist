@@ -2,13 +2,18 @@ package com.bia.todolist.model;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.bia.todolist.enums.ProfileEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +24,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.stream.Collectors;
+import java.util.stream.Collectors.*;
 
 @Entity
 @Table(name = "tb_user")
@@ -45,4 +53,12 @@ public class User {
     @JsonProperty(access = Access.WRITE_ONLY)
     private List<Task> task = new ArrayList<Task>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JsonProperty(access = Access.WRITE_ONLY)
+    private Set<Integer> profiles = new HashSet<>();
+
+    public Set<ProfileEnum> getProfiles(){
+      
+        return this.profiles.stream().map(x -> ProfileEnum.toEnum(x)).collect(Collectors.toSet());
+    }
 }
