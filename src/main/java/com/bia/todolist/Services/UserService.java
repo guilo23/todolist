@@ -1,7 +1,9 @@
-package com.bia.todolist.Services;
+package com.bia.todolist.services;
 
 import java.util.Optional;
 
+import com.bia.todolist.Exceptions.DataBindingViolationException;
+import com.bia.todolist.Exceptions.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bia.todolist.controller.DTOs.UserDto;
@@ -24,7 +26,7 @@ public class UserService {
     public User findById(Long id){
         Optional<User> user = this.userRepository.findById(id);
 
-        return user.orElseThrow(() -> new RuntimeException(
+        return user.orElseThrow(() -> new ObjectNotFoundException(
                 "Usuario não encontrado! id:" + id + ",tipo:" + User.class.getName()
         ));
     }
@@ -59,7 +61,7 @@ public class UserService {
         try {
             this.userRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Não é possível excluir pois há entidades relacionadas ");
+            throw new DataBindingViolationException("Não é possível excluir pois há entidades relacionadas ");
         }
     }
 }

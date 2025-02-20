@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.bia.todolist.Services.TaskService;
+import com.bia.todolist.services.TaskService;
 import com.bia.todolist.model.Task;
 
 @RestController

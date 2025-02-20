@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bia.todolist.Services.UserService;
 import com.bia.todolist.controller.DTOs.UserDto;
 import com.bia.todolist.model.User;
+import com.bia.todolist.services.UserService;
 
 import jakarta.validation.Valid;
 

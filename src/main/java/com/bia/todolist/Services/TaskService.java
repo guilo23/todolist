@@ -1,4 +1,4 @@
-package com.bia.todolist.Services;
+package com.bia.todolist.services;
 
 import java.util.List;
 import java.util.Optional;
