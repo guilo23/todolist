@@ -10,6 +10,7 @@ import com.bia.todolist.enums.ProfileEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -55,10 +56,11 @@ public class User {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JsonProperty(access = Access.WRITE_ONLY)
+    @CollectionTable(name = "tb_profiles")
+    @Column(name = "profiles",nullable = false)
     private Set<Integer> profiles = new HashSet<>();
 
     public Set<ProfileEnum> getProfiles(){
-      
-        return this.profiles.stream().map(x -> ProfileEnum.toEnum(x)).collect(Collectors.toSet());
+        return this.profiles.stream().map(ProfileEnum::toEnum).collect(Collectors.toSet());
     }
 }
