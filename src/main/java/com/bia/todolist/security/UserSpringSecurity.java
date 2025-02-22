@@ -1,4 +1,4 @@
-package com.security;
+package com.bia.todolist.security;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +16,7 @@ public class UserSpringSecurity implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
+    public UserSpringSecurity(){}
 
     public UserSpringSecurity(Long id, String username, String password, Set<ProfileEnum> profilesEnum) {
         this.id = id;

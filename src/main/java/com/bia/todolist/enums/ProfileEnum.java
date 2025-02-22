@@ -11,7 +11,7 @@ public enum  ProfileEnum {
     private int code;
     private String description;
 
-    public ProfileEnum toEnum(Integer code){
+    public static ProfileEnum fromEnum(Integer code){
         if(code == null){
             return null;
         }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.bia.todolist.model.User;
 import com.bia.todolist.repositories.UserRepository;
-import com.security.UserSpringSecurity;
+import com.bia.todolist.security.UserSpringSecurity;
 
 @Service
 public class UserDeatailsServiceImpl implements UserDetailsService{

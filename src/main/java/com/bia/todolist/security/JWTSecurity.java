@@ -1,4 +1,4 @@
-package com.security;
+package com.bia.todolist.security;
 
 import javax.crypto.SecretKey;
 
@@ -26,7 +26,7 @@ public class JWTSecurity {
         SecretKey key = gSecretKey();
         return Jwts.builder()
             .setSubject(username)
-            .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expiration)))
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
             .signWith(key)
             .compact();
 
@@ -47,13 +47,20 @@ public class JWTSecurity {
         }
         return false;
     }
-    public Claims getClaims(String tolken){
+    public String getUsername(String token){
+        Claims claims = getClaims(token);
+        if(Objects.nonNull(claims))
+            return claims.getSubject();
+
+    return null;
+    }
+    public Claims getClaims(String token){
         SecretKey key = gSecretKey();
         try {
             return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(tolken)
+                .parseClaimsJws(token)
                 .getBody();
         } catch (Exception e) {
             return null;

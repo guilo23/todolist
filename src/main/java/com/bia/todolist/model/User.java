@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.bia.todolist.enums.ProfileEnum;
+import com.bia.todolist.enums.ProfileEnum.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -61,6 +62,6 @@ public class User {
     private Set<Integer> profiles = new HashSet<>();
 
     public Set<ProfileEnum> getProfiles(){
-        return this.profiles.stream().map(ProfileEnum::toEnum).collect(Collectors.toSet());
+        return this.profiles.stream().map(x -> ProfileEnum.fromEnum(x)).collect(Collectors.toSet());
     }
 }
