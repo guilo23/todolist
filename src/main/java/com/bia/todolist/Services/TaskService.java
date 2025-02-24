@@ -1,8 +1,13 @@
 package com.bia.todolist.services;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import com.bia.todolist.Exceptions.AuthorizationException;
+import com.bia.todolist.Exceptions.ObjectNotFoundException;
+import com.bia.todolist.enums.ProfileEnum;
+import com.bia.todolist.security.UserSpringSecurity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,18 +28,38 @@ public class TaskService {
 
 
     public Task findById(Long id){
-        Optional<Task> task = this.taskRepository.findById(id);
-        return task.orElseThrow(() -> new RuntimeException("Task not found"));
+        Task task = this.taskRepository.findById(id).orElseThrow(()->new ObjectNotFoundException(
+                "Tarefa não encontrada"
+        ));
+
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+        if(Objects.isNull(userSpringSecurity) ||
+                !userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !(userHasTask(userSpringSecurity,task))) {
+
+             throw new AuthorizationException("Task not found") ;
+        }
+        return task;
+
     }
     @Transactional
     public  Task create(Task obj){
-        User user = this.userService.findById(obj.getUser().getIds());
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+        if(Objects.isNull(userSpringSecurity)) {
+
+            throw new AuthorizationException("Task not found") ;
+        }
+        User user = this.userService.findById(userSpringSecurity.getId());
         obj.setUser(user);
         var object = this.taskRepository.save(obj);
         return object;
     }
-    public List<Task> findAllByUserId(Long id){
-        List<Task> tasks = this.taskRepository.findByUser_ids(id);
+    public List<Task> findAllByUser(){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+        if(Objects.isNull(userSpringSecurity)) {
+
+            throw new AuthorizationException("Task not found") ;
+        }
+        List<Task> tasks = this.taskRepository.findByUser_ids(userSpringSecurity.getId());
         return tasks;
     }
     public Task update(Task obj){
@@ -49,6 +74,9 @@ public class TaskService {
         } catch (Exception e) {
             throw new RuntimeException("Task not RM");
         }
+    }
+    private Boolean userHasTask (UserSpringSecurity userSpringSecurity,Task task){
+        return task.getUser().getIds().equals(userSpringSecurity.getId());
     }
 
 }

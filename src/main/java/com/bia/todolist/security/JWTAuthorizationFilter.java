@@ -27,6 +27,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
 
@@ -41,7 +43,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        if (this.jwtUtil.isValidTolken(token)) {
+        if (this.jwtUtil.isValidToken(token)) {
             String username = this.jwtUtil.getUsername(token);
             UserDetails user = this.userDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authenticatedUser = new UsernamePasswordAuthenticationToken(user, null,
@@ -50,4 +52,5 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
         return null;
     }
+
 }

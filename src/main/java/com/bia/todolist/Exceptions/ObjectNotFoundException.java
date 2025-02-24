@@ -1,10 +1,11 @@
 package com.bia.todolist.Exceptions;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.persistence.EntityNotFoundException;
+
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class ObjectNotFoundException extends EntityNotFoundException {

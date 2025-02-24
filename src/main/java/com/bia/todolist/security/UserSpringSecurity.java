@@ -3,47 +3,29 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.bia.todolist.enums.ProfileEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.bia.todolist.enums.ProfileEnum;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-
+@NoArgsConstructor
+@Getter
 public class UserSpringSecurity implements UserDetails {
+
     private Long id;
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserSpringSecurity(){}
-
-    public UserSpringSecurity(Long id, String username, String password, Set<ProfileEnum> profilesEnum) {
+    public UserSpringSecurity(Long id, String username, String password, Set<ProfileEnum> profileEnums) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.authorities = profilesEnum.stream()
-        .map(x -> new SimpleGrantedAuthority(x.getDescription()))
-        .collect(Collectors.toList());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
+        this.authorities = profileEnums.stream().map(x -> new SimpleGrantedAuthority(x.getDescription()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -65,8 +47,9 @@ public class UserSpringSecurity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    public boolean hasRole(ProfileEnum profileEnum){
+
+    public boolean hasRole(ProfileEnum profileEnum) {
         return getAuthorities().contains(new SimpleGrantedAuthority(profileEnum.getDescription()));
     }
-    
+
 }

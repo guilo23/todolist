@@ -1,8 +1,5 @@
 package com.bia.todolist.configs;
 
-import com.bia.todolist.security.JWTAuthorizationFilter;
-import com.bia.todolist.security.JWTSecurity;
-import com.bia.todolist.services.UserDeatailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.bia.todolist.security.JWTAuthorizationFilter;
+import com.bia.todolist.security.JWTSecurity;
 import com.bia.todolist.security.JWTauthenticationFilter;
 
 @Configuration
@@ -36,18 +35,18 @@ public class SecurityConfig {
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
-            "/user", "/login"
+            "/v1/user", "/login"
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.disable());
+        http.csrf(csrf -> csrf.disable());
 
         AuthenticationManagerBuilder authManagerBuilder =
             http.getSharedObject(AuthenticationManagerBuilder.class);
-
-            authManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
-            http.csrf(csrf -> csrf.disable());
+            authManagerBuilder.userDetailsService(this.userDetailsService)
+            .passwordEncoder(bCryptPasswordEncoder());
 
         this.authenticationManager = authManagerBuilder.build();
 
@@ -62,7 +61,7 @@ public class SecurityConfig {
         return http.build();
     }
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

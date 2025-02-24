@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bia.todolist.controller.DTOs.UserDto;
 import com.bia.todolist.model.User;
 import com.bia.todolist.services.UserService;
 
@@ -34,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping
-    private ResponseEntity<Object> create( @RequestBody UserDto userDto){
+    private ResponseEntity<Object> create( @RequestBody User userDto){
         
        this.userService.create(userDto);
         return ResponseEntity.ok().build();
