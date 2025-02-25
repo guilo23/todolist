@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.bia.todolist.Exceptions.AuthorizationException;
 import com.bia.todolist.Exceptions.ObjectNotFoundException;
 import com.bia.todolist.enums.ProfileEnum;
+import com.bia.todolist.model.projeto.TaskProjection;
 import com.bia.todolist.security.UserSpringSecurity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +18,13 @@ import com.bia.todolist.repositories.TaskRepository;
 
 @Service
 public class TaskService {
-
     private TaskRepository taskRepository;    
     private UserService userService;
 
     public TaskService(TaskRepository taskRepository, UserService userService) {
         this.taskRepository = taskRepository;
         this.userService = userService;
+
     }
 
 

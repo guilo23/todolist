@@ -21,11 +21,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.stream.Collectors;
 import java.util.stream.Collectors.*;
@@ -34,8 +32,7 @@ import java.util.stream.Collectors.*;
 @Table(name = "tb_user")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,12 +41,15 @@ public class User {
 
     @Column(name = "username",length = 100,nullable = false,unique = true)
     @Size(min=2,max = 100)
+    @NotBlank
     private String username;
 
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password",length = 60,nullable = false)
     @Size(min=8,max=240)
+    @NotBlank
     private String password;
+
 
     @OneToMany(mappedBy = "user")
     @JsonProperty(access = Access.WRITE_ONLY)

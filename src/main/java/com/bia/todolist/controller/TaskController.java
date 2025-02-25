@@ -3,6 +3,7 @@ package com.bia.todolist.controller;
 import java.net.URI;
 import java.util.List;
 
+import com.bia.todolist.model.projeto.TaskProjection;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,8 @@ import com.bia.todolist.services.TaskService;
 @RequestMapping("/v1/task")
 public class TaskController {
     private TaskService taskService;
+
+
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;

@@ -8,19 +8,21 @@ import java.util.stream.Stream;
 
 import com.bia.todolist.Exceptions.AuthorizationException;
 import com.bia.todolist.enums.ProfileEnum;
+import com.bia.todolist.model.DTOs.UserDto;
+import com.bia.todolist.model.DTOs.UserUpdateDTO;
 import com.bia.todolist.security.UserSpringSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bia.todolist.Exceptions.DataBindingViolationException;
 import com.bia.todolist.Exceptions.ObjectNotFoundException;
-import com.bia.todolist.controller.DTOs.UserDto;
-import com.bia.todolist.model.User;
+import com.bia.todolist.model.*;
 import com.bia.todolist.repositories.TaskRepository;
 import com.bia.todolist.repositories.UserRepository;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 public class UserService {
@@ -73,7 +75,6 @@ public class UserService {
     public User update(User obj){
         User newObj = findById(obj.getIds());
         newObj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
-        obj.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet()));
         return this.userRepository.save(newObj);
     }
 
@@ -92,4 +93,18 @@ public class UserService {
             return null;
         }
     }
+    public User fromDTO( UserDto obj){
+        User user = new User();
+        user.setUsername(obj.username());
+        user.setPassword(obj.password());
+        return user;
+    }
+
+    public User fromDTO( UserUpdateDTO obj) {
+        User user = new User();
+        user.setIds(obj.getId());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
+
 }

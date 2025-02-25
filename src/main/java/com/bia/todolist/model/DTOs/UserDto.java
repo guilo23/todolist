@@ -1,4 +1,5 @@
-package com.bia.todolist.controller.DTOs;
+package com.bia.todolist.model.DTOs;
+
 
 public record UserDto(String username, String password) {
     public UserDto {

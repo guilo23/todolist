@@ -1,5 +1,6 @@
 package com.bia.todolist.controller;
 
+import com.bia.todolist.model.DTOs.UserUpdateDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bia.todolist.model.User;
 import com.bia.todolist.services.UserService;
+import com.bia.todolist.model.DTOs.UserDto;
 
 import jakarta.validation.Valid;
 
@@ -40,13 +42,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @Valid @RequestBody User obj){
-        this.userService.update(obj);
+    private ResponseEntity<Void> updateUser(@PathVariable("id") Long id,  @RequestBody UserUpdateDTO obj){
+        obj.setId(id);
+        User user = this.userService.fromDTO(obj);
+        this.userService.update(user);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{user_id}")
-    private ResponseEntity<Void> deleteUser(@PathVariable("user_id") Long id){
+    @DeleteMapping("/{userid}")
+    private ResponseEntity<Void> deleteUser(@PathVariable("userid") Long id){
         this.userService.delete(id);
         return ResponseEntity.noContent().build();
     }
