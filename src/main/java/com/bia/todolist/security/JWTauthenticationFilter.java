@@ -34,6 +34,15 @@ public class JWTauthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
+            if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+                response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+                return null; // Não tenta autenticar, já que é apenas uma verificação de CORS
+            }
+
             User userCredentials = new ObjectMapper().readValue(request.getInputStream(), User.class);
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
