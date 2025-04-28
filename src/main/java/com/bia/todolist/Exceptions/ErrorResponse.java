@@ -12,13 +12,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
     private final int status;
     private final String message;
     private String stackTrace;
     private List<ValidationError> errors;
+
+    public ErrorResponse(int status, String message) {
+        this.status = status; // ou valor padrão
+        this.message = message; // ou valor padrão
+        this.errors = new ArrayList<>(); // Inicializa a lista
+    }
 
     @Getter
     @Setter

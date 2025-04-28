@@ -35,7 +35,7 @@ public class SecurityConfig {
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
-            "/v1/user", "/login"
+            "/v1/user", "/login", "/actuator"
     };
 
     @Bean
